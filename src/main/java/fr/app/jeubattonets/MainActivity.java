@@ -16,21 +16,20 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    //private Button btnVsPlayer, btnVsComputer;
     private Button btnValider;
     private TextView textView;
     private ImageView imageView;
+    private LinearLayout myLayout1, myLayout2;
     private ArrayList<ImageView> imgBatonsSelectionnes = new ArrayList<ImageView>();
     private ArrayList<ImageView> imgBatons = new ArrayList<ImageView>();
     private int numJoueur = 1;
     private int nbBatonSelection = 0;
     private int nbBatonsRestants = 20;
-    private LinearLayout myLayout1, myLayout2;
+    private boolean gameOver = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
         setContentView(R.layout.activity_batonnet);
 
         myLayout1 = (LinearLayout) findViewById(R.id.main1);
@@ -38,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         btnValider = findViewById(R.id.btnValider);
         textView = findViewById(R.id.msgSelection);
         textView.setTextColor(Color.parseColor("#00AA00")); // Vert
+        btnValider.setEnabled(false);
 
         for(int i = 0; i < 20; i++) {
             imageView = new ImageView(this);
@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(gameOver)
+                        return;
+
                     for(ImageView img : imgBatonsSelectionnes) {
                         if(img == v) {
                             ImageView image = (ImageView) v;
@@ -63,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
 
                             imgBatonsSelectionnes.remove(img);
                             nbBatonSelection--;
+
+                            if(nbBatonSelection == 0)
+                                btnValider.setEnabled(false);
+
                             return;
                         }
                     }
@@ -73,8 +80,10 @@ public class MainActivity extends AppCompatActivity {
                         nbBatonSelection++;
 
                         imgBatonsSelectionnes.add(image);
+
+                        btnValider.setEnabled(true);
                     } else {
-                        displayNotif("3 batonnets sélectionnés maximum", false);
+                        displayNotif("3 bâtonnets sélectionnés maximum", false, false);
                     }
                 }
             });
@@ -83,6 +92,11 @@ public class MainActivity extends AppCompatActivity {
         btnValider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(gameOver) {
+                    initialize();
+                    return;
+                }
+
                 for(ImageView img : imgBatonsSelectionnes) {
                     img.setVisibility(View.INVISIBLE);
                 }
@@ -93,11 +107,13 @@ public class MainActivity extends AppCompatActivity {
                 imgBatonsSelectionnes.clear();
 
                 if(nbBatonsRestants <= 1) {
-                    displayNotif("Victoire pour le joueur " + numJoueur, true);
-
-                    initialize();
+                    displayNotif("Victoire pour le joueur " + numJoueur, true, true);
+                    btnValider.setText(R.string.btnRetry);
+                    textView.setText("Victoire pour le joueur " + numJoueur + " !");
+                    gameOver = true;
                 } else {
                     changePlayer(textView);
+                    btnValider.setEnabled(false);
                 }
             }
         });
@@ -125,14 +141,22 @@ public class MainActivity extends AppCompatActivity {
         numJoueur = 1;
         nbBatonsRestants = 20;
         nbBatonSelection = 0;
+        gameOver = false;
         textView.setText(R.string.msgSelection1);
         textView.setTextColor(Color.parseColor("#00AA00")); // Vert
+        btnValider.setText(R.string.btnValider);
+        btnValider.setEnabled(false);
     }
 
-    public void displayNotif(String msg, boolean estCentre) {
+    public void displayNotif(String msg, boolean estCentre, boolean notifLente) {
         Context context = getApplicationContext();
         CharSequence text = msg;
-        int duration = Toast.LENGTH_LONG;
+        int duration;
+
+        if(notifLente)
+            duration = Toast.LENGTH_LONG;
+        else
+            duration = Toast.LENGTH_SHORT;
 
         Toast toast = Toast.makeText(context, text, duration);
         if(estCentre)
