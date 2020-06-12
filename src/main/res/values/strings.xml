@@ -3,4 +3,5 @@
     <string name="msgSelection1">Joueur 1 - Sélectionnez 1, 2 ou 3 batonnets</string>
     <string name="msgSelection2">Joueur 2 - Sélectionnez 1, 2 ou 3 batonnets</string>
     <string name="btnValider">Valider</string>
+    <string name="btnRetry">Rejouer</string>
 </resources>
