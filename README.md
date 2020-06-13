@@ -1,4 +1,4 @@
-Vous pouvez le fichier compressé <a href="https://www.servgbc.fr/download/JeuDeBatonnets.zip">ici</a>.
+Vous pouvez télécharger l'exécutable APK <a href="https://www.servgbc.fr/download/JeuDeBatonnets.zip">ici</a>.
 
 
 :: REQUIS ::
