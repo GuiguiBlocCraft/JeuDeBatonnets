@@ -15,5 +15,6 @@ Voilà, votre application est installé !
 *Bon jeu !*
 
 
-Langage utilisé : **Java**
+Langage : **Java**
+
 Logiciel : **Android Studio**
