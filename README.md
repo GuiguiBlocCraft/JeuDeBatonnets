@@ -13,3 +13,7 @@ Normalement, votre téléphone vous assiste jusqu'à la fin de l'installation.
 Voilà, votre application est installé !
 
 *Bon jeu !*
+
+
+Langage utilisé : **Java**
+Logiciel : **Android Studio**
